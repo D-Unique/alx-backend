@@ -14,7 +14,7 @@ class FIFOCache(BaseCaching):
         """call parent class"""
 
     def put(self, key, item):
-        """ Add key- item pain
+        """ Add key- item pair
             remove first item when storage is > maxlimit
         """
         if (key is None or item is None):

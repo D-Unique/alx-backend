@@ -15,11 +15,8 @@ class BasicCache(BaseCaching):
         """
         if (key is None or item is None):
             pass
-        rkey = self.cache_data.get(key)
-        if (rkey is None):
-            pass
-        
-        self.cache_data[key] = item
+        else:
+            self.cache_data[key] = item
 
     def get(self, key):
         """this function retrives item from the dict - cache_data

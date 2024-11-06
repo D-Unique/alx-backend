@@ -25,12 +25,14 @@ users = {
 }
 
 def get_user() -> Dict:
+    """get user"""
     if (request.args.get('login_as') in users.keys()):
         return  users['login_as'] 
     return None
 
 @app.before_request
 def before_request():
+   """first run"""
    g.user = get_user()
   
    if g.user is None:

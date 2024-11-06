@@ -23,7 +23,7 @@ def get_locale():
 
 
 @app.route('/')
-def home():
+def index():
     """home route"""
     title = 'Welcome to Holberton'
     greet = 'Hello world'

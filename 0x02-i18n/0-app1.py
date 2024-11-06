@@ -24,3 +24,12 @@ def home():
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)
+
+
+Create a get_locale function with the babel.localeselector decorator. Use request.accept_languages to determine the best match with our supported languages.
+
+Repo:
+
+GitHub repository: alx-backend
+Directory: 0x02-i18n
+File: 2-app.py, templates/2-index.html

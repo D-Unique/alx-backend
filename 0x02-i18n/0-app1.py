@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """A basic flask app"""
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g, url_for
 from flask_babel import Babel
+from typing import Dict
 
 
 class Config:
@@ -14,6 +15,29 @@ class Config:
 app = Flask(__name__)
 app.config.from_object(Config)
 babel = Babel(app)
+
+
+users = {
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+}
+
+def get_user() -> Dict:
+    if (request.args.get('login_as') in users.keys()):
+        return  users['login_as'] 
+    return None
+
+@app.before_request
+def before_request():
+   g.user = get_user()
+  
+   if g.user is None:
+       login = "You are not logged in."
+       return url_for(home, login=login)
+   login = f"You are logged in as {g.user.name}."
+   return url_for(home, login=login)
 
 
 @babel.localeselector

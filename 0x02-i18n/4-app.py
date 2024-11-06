@@ -30,7 +30,7 @@ def home():
     title = 'Welcome to Holberton'
     greet = 'Hello world'
 
-    return render_template('3-index.html', title=title, greet=greet)
+    return render_template('4-index.html', title=title, greet=greet)
 
 
 if __name__ == "__main__":

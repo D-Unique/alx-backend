@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
-""" doc doc doc """
-from flask import Flask, render_template, request, g
+"""A basic flask app"""
+from flask import Flask, render_template, request, g, url_for
 from flask_babel import Babel
+from typing import Dict
 
 
-class Config(object):
-    """doc doc doc"""
-
+class Config:
+    """configuration class"""
     LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
     BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 babel = Babel(app)
+
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -23,34 +24,38 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
-
-def get_user() -> dict:
-    """doc doc doc"""
-    user_id = request.args.get("login_as")
-    if user_id is not None and int(user_id) in users:
-        return users[int(user_id)]
+def get_user() -> Dict:
+    if (request.args.get('login_as') in users.keys()):
+        return  users['login_as'] 
     return None
-
 
 @app.before_request
 def before_request():
-    """doc doc doc"""
-    g.user = get_user()
+   g.user = get_user()
+  
+   if g.user is None:
+       login = "You are not logged in."
+       return url_for(home, login=login)
+   login = f"You are logged in as {g.user.name}."
+   return url_for(home, login=login)
 
 
 @babel.localeselector
 def get_locale() -> str:
-    """doc doc doc"""
-    if request.args.get("locale") in app.config["LANGUAGES"]:
-        return request.args.get("locale")
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    """get locale"""
+    if (request.args.get('locale') in Config.LANGUAGES):
+        return request.args.get('locale')
+    return request.accept_languages.best_match(['LANGUAGES'])
 
 
-@app.route("/")
-def index() -> str:
-    """doc doc doc"""
-    return render_template("5-index.html")
+@app.route('/')
+def home():
+    """home route"""
+    title = 'Welcome to Holberton'
+    greet = 'Hello world'
+
+    return render_template('3-index.html', title=title, greet=greet)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(debug=True, host='127.0.0.1', port=5000)

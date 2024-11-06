@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """A basic flask app"""
-from flask import Flask, render_template
+from flask import Flask, render_template, request, g
 from flask_babel import Babel
 
 
-class config:
+class Config:
     """configuration class"""
     Languages = ["en", "fr"]
     BABEL_DEFAULT_TIMEZONE = 'UTC'
@@ -12,8 +12,13 @@ class config:
 
 
 app = Flask(__name__)
-app.config.from_object(config)
+app.config.from_object(Config)
 babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(['LANGUAGES'])
 
 
 @app.route('/')
@@ -24,12 +29,3 @@ def home():
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)
-
-
-Create a get_locale function with the babel.localeselector decorator. Use request.accept_languages to determine the best match with our supported languages.
-
-Repo:
-
-GitHub repository: alx-backend
-Directory: 0x02-i18n
-File: 2-app.py, templates/2-index.html
